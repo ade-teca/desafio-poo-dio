@@ -4,60 +4,136 @@ import br.com.dio.desafio.dominio.Dev;
 import br.com.dio.desafio.dominio.Mentoria;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Curso curso1 = new Curso();
-        curso1.setTitulo("curso java");
-        curso1.setDescricao("descrição curso java");
-        curso1.setCargaHoraria(8);
+        Scanner scanner = new Scanner(System.in);
 
-        Curso curso2 = new Curso();
-        curso2.setTitulo("curso js");
-        curso2.setDescricao("descrição curso js");
-        curso2.setCargaHoraria(4);
+        System.out.println("Bem-vindo ao Bootcamp de Desenvolvimento de Software!");
+        System.out.print("Insira o nome do bootcamp: ");
+        String nomeBootcamp = scanner.nextLine();
+        String descricaoBootcamp = "Descrição do Bootcamp " + nomeBootcamp;
+        Bootcamp bootcamp = new Bootcamp(nomeBootcamp, descricaoBootcamp);
 
-        Mentoria mentoria = new Mentoria();
-        mentoria.setTitulo("mentoria de java");
-        mentoria.setDescricao("descrição mentoria java");
-        mentoria.setData(LocalDate.now());
-
-        /*System.out.println(curso1);
-        System.out.println(curso2);
-        System.out.println(mentoria);*/
-
-        Bootcamp bootcamp = new Bootcamp();
-        bootcamp.setNome("Bootcamp Java Developer");
-        bootcamp.setDescricao("Descrição Bootcamp Java Developer");
-        bootcamp.getConteudos().add(curso1);
-        bootcamp.getConteudos().add(curso2);
+        Mentoria mentoria = new Mentoria("Mentoria de Java", "Descrição mentoria Java");
         bootcamp.getConteudos().add(mentoria);
 
-        Dev devCamila = new Dev();
-        devCamila.setNome("Camila");
-        devCamila.inscreverBootcamp(bootcamp);
-        System.out.println("Conteúdos Inscritos Camila:" + devCamila.getConteudosInscritos());
-        devCamila.progredir();
-        devCamila.progredir();
-        System.out.println("-");
-        System.out.println("Conteúdos Inscritos Camila:" + devCamila.getConteudosInscritos());
-        System.out.println("Conteúdos Concluídos Camila:" + devCamila.getConteudosConcluidos());
-        System.out.println("XP:" + devCamila.calcularTotalXp());
+        // Lista para armazenar os desenvolvedores inscritos no bootcamp
+        List<Dev> desenvolvedoresInscritos = new ArrayList<>();
 
-        System.out.println("-------");
+        while (true) {
+            System.out.println("Opções:");
+            System.out.println("1. Inscrever-se no bootcamp");
+            System.out.println("2. Progredir em um conteúdo");
+            System.out.println("3. Ver conteúdos inscritos");
+            System.out.println("4. Ver conteúdos concluídos");
+            System.out.println("5. Ver XP");
+            System.out.println("6. Adicionar curso ao bootcamp");
+            System.out.println("7. Sair");
+            System.out.print("Escolha uma opção: ");
+            int opcao = scanner.nextInt();
+            scanner.nextLine(); // Consumir o newline
 
-        Dev devJoao = new Dev();
-        devJoao.setNome("Joao");
-        devJoao.inscreverBootcamp(bootcamp);
-        System.out.println("Conteúdos Inscritos João:" + devJoao.getConteudosInscritos());
-        devJoao.progredir();
-        devJoao.progredir();
-        devJoao.progredir();
-        System.out.println("-");
-        System.out.println("Conteúdos Inscritos João:" + devJoao.getConteudosInscritos());
-        System.out.println("Conteúdos Concluidos João:" + devJoao.getConteudosConcluidos());
-        System.out.println("XP:" + devJoao.calcularTotalXp());
-
+            switch (opcao) {
+                case 1:
+                    System.out.print("Insira o nome do desenvolvedor: ");
+                    String nomeDev = scanner.nextLine();
+                    Dev dev = new Dev(nomeDev);
+                    dev.inscreverBootcamp(bootcamp);
+                    desenvolvedoresInscritos.add(dev); // Adiciona o desenvolvedor à lista de inscritos
+                    System.out.println("Você se inscreveu com sucesso no bootcamp!");
+                    break;
+                case 2:
+                    System.out.print("Insira o nome do desenvolvedor: ");
+                    nomeDev = scanner.nextLine();
+                    // Procura o desenvolvedor inscrito na lista
+                    Dev devProgresso = buscarDevPorNome(nomeDev, desenvolvedoresInscritos);
+                    if (devProgresso != null) {
+                        devProgresso.progredir();
+                        System.out.println("Progresso realizado com sucesso!");
+                    } else {
+                        System.out.println("Desenvolvedor não encontrado ou não inscrito no bootcamp.");
+                    }
+                    break;
+                case 3:
+                    System.out.print("Insira o nome do desenvolvedor: ");
+                    nomeDev = scanner.nextLine();
+                    // Procura o desenvolvedor inscrito na lista
+                    Dev devInscritos = buscarDevPorNome(nomeDev, desenvolvedoresInscritos);
+                    if (devInscritos != null) {
+                        System.out.println("Conteúdos Inscritos " + nomeDev + ": " + devInscritos.getConteudosInscritos());
+                    } else {
+                        System.out.println("Desenvolvedor não encontrado ou não inscrito no bootcamp.");
+                    }
+                    break;
+                case 4:
+                    System.out.print("Insira o nome do desenvolvedor: ");
+                    nomeDev = scanner.nextLine();
+                    // Procura o desenvolvedor inscrito na lista
+                    Dev devConcluidos = buscarDevPorNome(nomeDev, desenvolvedoresInscritos);
+                    if (devConcluidos != null) {
+                        System.out.println("Conteúdos Concluídos " + nomeDev + ": " + devConcluidos.getConteudosConcluidos());
+                    } else {
+                        System.out.println("Desenvolvedor não encontrado ou não inscrito no bootcamp.");
+                    }
+                    break;
+                case 5:
+                    System.out.print("Insira o nome do desenvolvedor: ");
+                    nomeDev = scanner.nextLine();
+                    // Procura o desenvolvedor inscrito na lista
+                    Dev devXP = buscarDevPorNome(nomeDev, desenvolvedoresInscritos);
+                    if (devXP != null) {
+                        System.out.println("XP de " + nomeDev + ": " + devXP.calcularTotalXp());
+                    } else {
+                        System.out.println("Desenvolvedor não encontrado ou não inscrito no bootcamp.");
+                    }
+                    break;
+                case 6:
+                    System.out.println("Cursos disponíveis:");
+                    List<Curso> cursosDisponiveis = Curso.getCursosDisponiveis();
+                    for (int i = 0; i < cursosDisponiveis.size(); i++) {
+                        System.out.println((i + 1) + ". " + cursosDisponiveis.get(i).getTitulo());
+                    }
+                    System.out.print("Escolha um curso para adicionar ao bootcamp: ");
+                    int cursoEscolhido = scanner.nextInt();
+                    scanner.nextLine(); // Consumir o newline
+                    if (cursoEscolhido > 0 && cursoEscolhido <= cursosDisponiveis.size()) {
+                        Curso curso = cursosDisponiveis.get(cursoEscolhido - 1);
+                        System.out.print("Insira o nome do desenvolvedor que deseja adicionar ao curso: ");
+                        nomeDev = scanner.nextLine();
+                        // Procura o desenvolvedor inscrito na lista
+                        Dev devAdicionarCurso = buscarDevPorNome(nomeDev, desenvolvedoresInscritos);
+                        if (devAdicionarCurso != null) {
+                            bootcamp.getConteudos().add(curso);
+                            devAdicionarCurso.inscreverConteudo(curso);
+                            System.out.println("Curso " + curso.getTitulo() + " adicionado ao bootcamp para " + nomeDev + "!");
+                        } else {
+                            System.out.println("Desenvolvedor não encontrado ou não inscrito no bootcamp.");
+                        }
+                    } else {
+                        System.out.println("Opção inválida!");
+                    }
+                    break;
+                case 7:
+                    System.out.println("Saindo...");
+                    scanner.close();
+                    return;
+                default:
+                    System.out.println("Opção inválida! Tente novamente.");
+            }
+        }
     }
 
+    // Método auxiliar para buscar um desenvolvedor pelo nome na lista de inscritos
+    private static Dev buscarDevPorNome(String nome, List<Dev> listaDevs) {
+        for (Dev dev : listaDevs) {
+            if (dev.getNome().equalsIgnoreCase(nome)) {
+                return dev;
+            }
+        }
+        return null; // Retorna null se não encontrar o desenvolvedor na lista
+    }
 }

@@ -1,17 +1,36 @@
 package br.com.dio.desafio.dominio;
 
-public class Curso extends Conteudo{
+import java.util.ArrayList;
+import java.util.List;
+
+public class Curso extends Conteudo {
 
     private int cargaHoraria;
+
+    // Lista estática de cursos disponíveis
+    private static List<Curso> cursosDisponiveis = new ArrayList<>();
+
+    // Inicialização dos cursos disponíveis
+    static {
+        cursosDisponiveis.add(new Curso("Curso Java", "Descrição curso Java", 10));
+        cursosDisponiveis.add(new Curso("Curso Python", "Descrição curso Python", 8));
+        cursosDisponiveis.add(new Curso("Curso JavaScript", "Descrição curso JavaScript", 6));
+    }
+
+    // Construtor da subclasse
+    public Curso(String titulo, String descricao, int cargaHoraria) {
+        super(titulo, descricao); // Chama o construtor da superclasse
+        this.cargaHoraria = cargaHoraria; // Inicializa o atributo da subclasse
+    }
 
     @Override
     public double calcularXp() {
         return XP_PADRAO * cargaHoraria;
     }
 
-    public Curso() {
+    public static List<Curso> getCursosDisponiveis() {
+        return cursosDisponiveis;
     }
-
 
     public int getCargaHoraria() {
         return cargaHoraria;

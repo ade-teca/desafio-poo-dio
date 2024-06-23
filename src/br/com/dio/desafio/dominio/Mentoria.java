@@ -4,15 +4,18 @@ import java.time.LocalDate;
 
 public class Mentoria extends Conteudo{
 
-    private LocalDate data;
+    private LocalDate data = LocalDate.now();
+
+    public Mentoria(String titulo, String descricao) {
+        super(titulo, descricao); // Chama o construtor da superclasse
+
+    }
 
     @Override
     public double calcularXp() {
         return XP_PADRAO + 20d;
     }
 
-    public Mentoria() {
-    }
 
     public LocalDate getData() {
         return data;
